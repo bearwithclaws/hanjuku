@@ -1,5 +1,6 @@
 (ns hanjuku.server
   (:use compojure.core
+        markdown.core
         [clojure.tools.logging :only [info debug warn error]]
         ;; for view
         [hiccup.core :only [html]]
@@ -51,7 +52,7 @@
       (for [{:keys [title slug body]} (mc/find-maps "blogpost")]
         [:div.post
          [:h3 [:a {:href (str "/post/" slug)} title]]
-         [:div.body body]
+         [:div.body (md-to-html-string body)]
          [:hr]])]))
 
 (defn single-post [slug]
@@ -60,7 +61,7 @@
     :content
     [:div.container
      [:h1 title]
-     [:div.body body]])))
+     [:div.body (md-to-html-string body)]])))
 
 ; routes
 
