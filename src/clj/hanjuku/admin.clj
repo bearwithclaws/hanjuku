@@ -29,11 +29,13 @@
      (include-js "/js/cljs.js")
      ]))
 
-(defn index []
+(defn index [request]
   (admin-layout
     :content
     [:div.container 
      [:h2 "New Post"]
+     (when-let [flash-message (-> request :flash)]
+       [:p flash-message])
      (form-to [:post "/admin/create-post"]
       (text-field {:placeholder "Title"} "title")
       [:br]
@@ -52,7 +54,7 @@
   (mc/insert "blogpost" {:title (params :title)
                          :body (params :body)
                          :slug (params :slug)})
-  (response/redirect "/admin"))
+  (assoc (response/redirect "/admin") :flash "Created new blogpost."))
 
 (defn update-post [params]
   (mc/update-by-id "blogpost" (ObjectId. (params :id))

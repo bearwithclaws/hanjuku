@@ -75,7 +75,7 @@
   (context "/admin" []
          (auth/wrap-basic-authentication
            (routes
-             (GET "/" [] (admin/index))
+             (GET "/" request (admin/index request))
              (GET "/edit-post/:slug" [slug] (admin/edit-post slug))
              (POST "/update-post" {params :params} (admin/update-post params))
              (POST "/create-post" {params :params} (admin/create-post params))
