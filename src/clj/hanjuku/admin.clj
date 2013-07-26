@@ -17,13 +17,11 @@
      [:title "Blog Admin"]
      (include-css 
                   "//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css"
-                  "/css/styles.css")]
+                  "/css/admin.css")]
     [:body
-     [:div.navbar.navbar-inverse.navbar-fixed-top
-      [:div.navbar-inner
-       [:div.container
-        [:a.brand {:href "/admin"} "Blog Admin"]]]]
-      content
+     [:div.container
+      [:header [:a.button.circle {:href "/admin"} "Admin"]]
+      content]
      (include-js "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js")
      (include-js "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js")
      (include-js "/js/cljs.js")
@@ -32,7 +30,8 @@
 (defn index [request]
   (admin-layout
     :content
-    [:div.container 
+    [:div
+     [:a.button {:href "/admin/new-post"} "New Blog Post"]
      [:h2 "New Post"]
      (when-let [flash-message (-> request :flash)]
        [:p flash-message])
