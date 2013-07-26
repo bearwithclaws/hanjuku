@@ -32,11 +32,17 @@
   (html
     [:head
      [:title "Simple Clojure Web App"]
-     (include-css 
+     (include-css "//fonts.googleapis.com/css?family=Montserrat:400,700"
                   "//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css"
                   "/css/styles.css")]
     [:body
-      content
+     [:header
+      [:div.container
+       [:a {:href "/"}
+        [:h1 "Hanjuku"]]
+       [:p.description "ridiculously minimal blogging platform"]]]
+     [:div.container {:id "content"}
+      content]
      (include-js "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js")
      (include-js "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js")
      (include-js "/js/cljs.js")
@@ -45,22 +51,18 @@
 (defn index []
   (layout
     :content
-    [:div.container 
-     [:h1 "Blog"]
-     [:h4 "powered by Hanjuku"]
-     [:br]
       (for [{:keys [title slug body]} (mc/find-maps "blogpost")]
         [:div.post
-         [:h3 [:a {:href (str "/post/" slug)} title]]
+         [:h2 [:a {:href (str "/post/" slug)} title]]
          [:div.body (md-to-html-string body)]
-         [:hr]])]))
+         [:hr]])))
 
 (defn single-post [slug]
   (let [{:keys [title body]} (mc/find-one-as-map "blogpost" {:slug slug})]
   (layout
     :content
-    [:div.container
-     [:h1 title]
+    [:div.post.single
+     [:h2 title]
      [:div.body (md-to-html-string body)]])))
 
 ; routes
