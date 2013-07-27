@@ -31,9 +31,8 @@
 (defn layout [& {:keys [content]}]
   (html
     [:head
-     [:title "Simple Clojure Web App"]
-     (include-css "//fonts.googleapis.com/css?family=Montserrat:400,700"
-                  "//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css"
+     [:title "Hanjuku"]
+     (include-css "//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css"
                   "/css/styles.css")]
     [:body
      [:header

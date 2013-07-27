@@ -1,6 +1,6 @@
-# simpleweb
+# Hanjuku
 
-Simple clojure + clojurescript boilerplate web app.
+Ridiculously minimal blog engine, written in Clojure.
 
 ## Running
 
@@ -18,10 +18,12 @@ Visit http://localhost:3000
 
 Use [SimpLESS](http://wearekiss.com/simpless).
 
-## Deploy to Heroku
-
-### Database (Redis)
-
-Add Redis Cloud (free) on Heroku:
-
-    heroku addons:add rediscloud:20
+## TODO
+- Blog post create/update validation (title must not be empty)
+- Automatically generate post slug (unique)
+- Upload image to S3 and insert into Markdown editor
+- Blog settings (title, description)
+- Theme settings (border color, background, custom logo, font)
+- Auto-expandable textarea
+- Save post as draft
+- Add post authors (integrates with gravatar)
