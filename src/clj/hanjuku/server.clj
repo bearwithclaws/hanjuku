@@ -53,7 +53,7 @@
     :content
       (for [{:keys [title slug body]} (mc/find-maps "blogpost")]
         [:div.post
-         [:h2 [:a {:href (str "/post/" slug)} title]]
+         [:h2 [:a {:href (str "/" slug)} title]]
          [:div.body (md-to-html-string body)]
          [:hr]])))
 
@@ -73,16 +73,17 @@
 
 (defroutes app-routes
   (GET "/" [] (index))
-  (GET "/post/:slug" [slug] (single-post slug))
   (context "/admin" []
          (auth/wrap-basic-authentication
            (routes
              (GET "/" request (admin/index request))
+             (GET "/new-post" [] (admin/new-post))
              (GET "/edit-post/:slug" [slug] (admin/edit-post slug))
              (POST "/update-post" {params :params} (admin/update-post params))
              (POST "/create-post" {params :params} (admin/create-post params))
              (POST "/delete-post" {params :params} (admin/delete-post params)))
            authenticated?))
+  (GET "/:slug" [slug] (single-post slug))  
   (route/resources "/")
   (route/not-found "Not Found"))
 

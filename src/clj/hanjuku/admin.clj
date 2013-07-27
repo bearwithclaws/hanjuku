@@ -30,24 +30,29 @@
 (defn index [request]
   (admin-layout
     :content
-    [:div
-     [:a.button {:href "/admin/new-post"} "New Blog Post"]
-     [:h2 "New Post"]
+    [:div.row
      (when-let [flash-message (-> request :flash)]
-       [:p flash-message])
+       [:p flash-message])     
+     [:div.span2
+      [:a.button {:href "/admin/new-post"} "New Blog Post"]]
+     [:div.span7
+     [:ul#post-listing
+      (for [{:keys [title slug]} (mc/find-maps "blogpost")]
+        [:li 
+         [:a {:href (str "/admin/edit-post/" slug)} title]])]]]))
+
+(defn new-post []
+  (admin-layout
+    :content
+    [:div#post-form
      (form-to [:post "/admin/create-post"]
       (text-field {:placeholder "Title"} "title")
       [:br]
       (text-field {:placeholder "Slug"} "slug")
       [:br]         
-      (text-area "body")
+      (text-area {:placeholder "Start typing here (in markdown)..."} "body")
       [:br]
-      (submit-button {:class "btn"} "Submit"))
-     [:h2 "List Posts"]
-     [:ul
-      (for [{:keys [title slug]} (mc/find-maps "blogpost")]
-        [:li 
-         [:a {:href (str "/admin/edit-post/" slug)} title]])]]))
+      (submit-button {:class "button"} "Submit"))]))
 
 (defn create-post [params]
   (mc/insert "blogpost" {:title (params :title)
@@ -70,7 +75,7 @@
   (let [{:keys [title slug body _id]} (mc/find-one-as-map "blogpost" {:slug slug})]
   (admin-layout
     :content
-    [:div.container
+    [:div#post-form
       (form-to [:post "/admin/update-post"]
        (hidden-field "id" _id)
        (text-field {:placeholder "Title"} "title" title)

@@ -2,17 +2,22 @@ body {
  padding-top: 60px;
 }
 
-header {
- margin-bottom: 30px;
+.container {
+ width: 960px;
 }
 
-a.button {
+header {
+ margin-bottom: 60px;
+}
+
+.button {
  background: #ccc;
  border-radius: 5px;
  display: inline-block;
  padding: 15px 30px;
  color: #fff;
  font-size: 16px;
+ border: 0;
  &:hover {
   text-decoration: none;
   background: #999;
@@ -31,3 +36,53 @@ a.button {
  }
 }
 
+ul#post-listing {
+ list-style: none;
+ margin-top: -15px;
+ margin-left: 30px;
+ li {
+  a {
+   display: block;
+   padding: 30px 0px;
+   border-bottom: 1px solid #f1f1f1;   
+   font-size: 16px;
+   color: #333;
+   &:hover {
+    background: #f1f1f1;
+    padding-left: 30px;
+    margin-left: -30px;
+    text-decoration: none;
+   }
+  }
+ }
+}
+
+#post-form {
+ input[type="text"] {
+  width: 100%;
+  box-shadow: none;
+  border: none;
+  font-size: 22px;
+  border-radius: 0;
+  background: #f1f1f1;
+  height: 50px;
+  padding-top: 10px;
+  line-height: 1.5em;
+  padding: 30px 20px;
+  &#slug {
+   width: 50%;
+   font-size: 16px;
+   padding: 15px;
+  }
+ }
+ textarea {
+  background: #f1f1f1;
+  width: 100%;
+  box-shadow: none;
+  border: none;
+  font-size: 16px;
+  border-radius: 0;
+  padding: 15px;
+  min-height: 350px;
+ }
+}
