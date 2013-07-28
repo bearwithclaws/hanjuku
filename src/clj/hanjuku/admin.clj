@@ -41,6 +41,9 @@
         [:li 
          [:a {:href (str "/admin/edit-post/" slug)} title]])]]]))
 
+(defn generate-slug [title]
+  (str/lower-case (str/replace (str/replace title #"\s+" "-") #"[\W+&&[^-]]" "")))
+
 (defn new-post []
   (admin-layout
     :content
@@ -48,8 +51,6 @@
      (form-to [:post "/admin/create-post"]
       (text-field {:placeholder "Title"} "title")
       [:br]
-      (text-field {:placeholder "Slug"} "slug")
-      [:br]         
       (text-area {:placeholder "Start typing here (in markdown)..."} "body")
       [:br]
       (submit-button {:class "button"} "Submit"))]))
@@ -57,7 +58,7 @@
 (defn create-post [params]
   (mc/insert "blogpost" {:title (params :title)
                          :body (params :body)
-                         :slug (params :slug)})
+                         :slug (generate-slug (params :title))})
   (assoc (response/redirect "/admin") :flash "Created new blogpost."))
 
 (defn update-post [params]
