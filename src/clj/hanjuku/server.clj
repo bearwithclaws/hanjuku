@@ -39,7 +39,7 @@
       [:div.container
        [:a {:href "/"}
         [:h1 "Hanjuku"]]
-       [:p.description "ridiculously minimal blogging platform"]]]
+       [:p.description "ridiculously minimal blog engine"]]]
      [:div.container {:id "content"}
       content]
      (include-js "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js")
