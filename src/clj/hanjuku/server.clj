@@ -1,12 +1,14 @@
 (ns hanjuku.server
   (:use compojure.core
         markdown.core
+        monger.query
         [clj-time.core :exclude [extend]]
         [clj-time.format]        
         [clojure.tools.logging :only [info debug warn error]]
         ;; for view
         [hiccup.core :only [html]]
         [hiccup.page :only [html5 include-css include-js]])
+  (:refer-clojure :exclude [sort find])
   (:require [org.httpkit.server :as server]
             [clojure.string :as str]
             [clojure.tools.nrepl.server :as nrepl]
@@ -54,10 +56,18 @@
      (include-js "/js/cljs.js")
      ]))
 
+(defn list-posts [page-number]
+  (with-collection "blogpost"
+  (find {})
+  (fields [:title :slug :date :body])
+  ;; it is VERY IMPORTANT to use array maps with sort
+  (sort (array-map :date -1))
+  (limit 10)))
+
 (defn index []
   (layout
     :content
-      (for [{:keys [title slug date body]} (mc/find-maps "blogpost")]
+      (for [{:keys [title slug date body]} (list-posts 1)]
         [:div.post
          [:h2 [:a {:href (str "/" slug)} title]]
          [:p.date (convert-friendly-date date)]

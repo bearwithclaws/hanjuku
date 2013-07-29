@@ -27,4 +27,4 @@ Use [SimpLESS](http://wearekiss.com/simpless).
 - Add post authors (integrates with gravatar)
 - Focus mode (hide all other elements during post writing)
 - Blog post create/update validation (title must not be empty)
-- Display post in right order (reverse chronological) on front page
+- Pagination
