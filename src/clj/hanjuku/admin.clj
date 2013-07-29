@@ -1,5 +1,7 @@
 (ns hanjuku.admin
   (:use compojure.core
+        [clj-time.core :exclude [extend]]
+        [clj-time.format]
         [clojure.tools.logging :only [info debug warn error]]
         ;; for view
         [hiccup.core :only [html]]
@@ -44,6 +46,10 @@
 (defn generate-slug [title]
   (str/lower-case (str/replace (str/replace title #"\s+" "-") #"[\W+&&[^-]]" "")))
 
+(defn convert-date [date]
+  (let [simple-date (formatters :date)]
+    (unparse simple-date date)))
+
 (defn new-post []
   (admin-layout
     :content
@@ -58,14 +64,16 @@
 (defn create-post [params]
   (mc/insert "blogpost" {:title (params :title)
                          :body (params :body)
-                         :slug (generate-slug (params :title))})
+                         :slug (generate-slug (params :title))
+                         :date (convert-date (now))})
   (assoc (response/redirect "/admin") :flash "Created new blogpost."))
 
 (defn update-post [params]
   (mc/update-by-id "blogpost" (ObjectId. (params :id))
                    {:title (params :title)
                     :body (params :body)
-                    :slug (params :slug)})
+                    :slug (params :slug)
+                    :date (params :date)})
   (response/redirect "/admin"))
 
 (defn delete-post [params]
@@ -73,7 +81,7 @@
   (response/redirect "/admin"))
 
 (defn edit-post [slug]
-  (let [{:keys [title slug body _id]} (mc/find-one-as-map "blogpost" {:slug slug})]
+  (let [{:keys [title slug date body _id]} (mc/find-one-as-map "blogpost" {:slug slug})]
   (admin-layout
     :content
     [:div#post-form
@@ -82,7 +90,9 @@
        (text-field {:placeholder "Title"} "title" title)
        [:br]
        (text-field {:placeholder "Slug"} "slug" slug)
-       [:br]         
+       [:br]    
+       (text-field {:placeholder "Date"} "date" date)
+       [:br]            
        (text-area "body" body)
        [:br]
        (submit-button {:class "btn"} "Update"))

@@ -14,7 +14,8 @@
                  [org.clojure/tools.nrepl "0.2.3"]
                  [ring-basic-authentication "1.0.2"]
                  [com.novemberain/monger "1.5.0"]
-                 [markdown-clj "0.9.28"]]
+                 [markdown-clj "0.9.28"]
+                 [clj-time "0.5.1"]]
   :plugins [[lein-ring "0.8.5"]
             [lein-cljsbuild "0.3.2"]]
   :main hanjuku.server

@@ -1,6 +1,8 @@
 (ns hanjuku.server
   (:use compojure.core
         markdown.core
+        [clj-time.core :exclude [extend]]
+        [clj-time.format]        
         [clojure.tools.logging :only [info debug warn error]]
         ;; for view
         [hiccup.core :only [html]]
@@ -28,6 +30,11 @@
 
 ;; templates
 
+(defn convert-friendly-date [date]
+  (let [friendly-date-formatter (formatter "MMM dd, yyyy")
+        simple-date-formatter (formatters :date)]
+    (unparse friendly-date-formatter (parse simple-date-formatter date))))
+
 (defn layout [& {:keys [content]}]
   (html
     [:head
@@ -50,9 +57,10 @@
 (defn index []
   (layout
     :content
-      (for [{:keys [title slug body]} (mc/find-maps "blogpost")]
+      (for [{:keys [title slug date body]} (mc/find-maps "blogpost")]
         [:div.post
          [:h2 [:a {:href (str "/" slug)} title]]
+         [:p.date (convert-friendly-date date)]
          [:div.body (md-to-html-string body)]
          [:hr]])))
 
