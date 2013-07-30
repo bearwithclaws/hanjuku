@@ -15,6 +15,8 @@
             [cemerick.shoreleave.rpc :refer (defremote) :as rpc]
             [ring.middleware.basic-authentication :as auth]
             [ring.middleware.reload :as reload]
+            [ring.middleware.flash :as flash]
+            [ring.middleware.session :as session]
             [compojure.handler :as handler]
             [compojure.route :as route]
             [monger.core :as mg]
@@ -89,7 +91,7 @@
 
 (defroutes app-routes
   (GET "/" [] (index))
-  (context "/admin" []
+  (context "/admins" []
          (auth/wrap-basic-authentication
            (routes
              (GET "/" request (admin/index request))
@@ -103,7 +105,7 @@
   (route/resources "/")
   (route/not-found "Not Found"))
 
-(def all-routes (rpc/wrap-rpc app-routes))
+(def all-routes (-> app-routes flash/wrap-flash session/wrap-session rpc/wrap-rpc))
 
 (def app
   (if @prod?

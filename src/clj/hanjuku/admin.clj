@@ -34,7 +34,8 @@
     :content
     [:div.row
      (when-let [flash-message (-> request :flash)]
-       [:p flash-message])     
+       [:p flash-message]
+       [:p (print-str request)])
      [:div.span2
       [:a.button {:href "/admin/new-post"} "New Blog Post"]]
      [:div.span7
