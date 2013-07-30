@@ -12,6 +12,7 @@
                  [com.cemerick/shoreleave-remote-ring "0.0.2"]
                  [jayq "2.0.0"]
                  [org.clojure/tools.nrepl "0.2.3"]
+                 [org.clojure/tools.namespace "0.2.4"]
                  [ring-basic-authentication "1.0.2"]
                  [com.novemberain/monger "1.5.0"]
                  [markdown-clj "0.9.28"]
