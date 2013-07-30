@@ -59,29 +59,34 @@
       [:br]
       (text-area {:placeholder "Start typing here (in markdown)..."} "body")
       [:br]
-      (submit-button {:class "button"} "Submit"))]))
+      (submit-button {:class "button" :value "Save Draft" :name "status"} "Save Draft")
+      (submit-button {:class "button" :value "Publish" :name "status"} "Publish"))]))
 
 (defn create-post [params]
+  (let [status (if (= (params :status) "Publish") "published" "draft")]
   (mc/insert "blogpost" {:title (params :title)
                          :body (params :body)
                          :slug (generate-slug (params :title))
-                         :date (convert-date (now))})
-  (assoc (response/redirect "/admin") :flash "Created new blogpost."))
+                         :date (convert-date (now))
+                         :status status})
+  (assoc (response/redirect "/admin") :flash "Created new blogpost.")))
 
 (defn update-post [params]
+  (let [status (if (or (= (params :status) "Publish") (= (params :status) "Update")) "published" "draft")]
   (mc/update-by-id "blogpost" (ObjectId. (params :id))
                    {:title (params :title)
                     :body (params :body)
                     :slug (params :slug)
-                    :date (params :date)})
-  (response/redirect "/admin"))
+                    :date (params :date)
+                    :status status})
+  (assoc (response/redirect "/admin") :flash "Blogpost updated.")))
 
 (defn delete-post [params]
   (mc/remove-by-id "blogpost" (ObjectId. (params :id)))
-  (response/redirect "/admin"))
+  (assoc (response/redirect "/admin") :flash "Blogpost deleted."))
 
 (defn edit-post [slug]
-  (let [{:keys [title slug date body _id]} (mc/find-one-as-map "blogpost" {:slug slug})]
+  (let [{:keys [title slug date status body _id]} (mc/find-one-as-map "blogpost" {:slug slug})]
   (admin-layout
     :content
     [:div#post-form
@@ -90,12 +95,18 @@
        (text-field {:placeholder "Title"} "title" title)
        [:br]
        (text-field {:placeholder "Slug"} "slug" slug)
-       [:br]    
+       [:br]         
        (text-field {:placeholder "Date"} "date" date)
        [:br]            
        (text-area "body" body)
        [:br]
-       (submit-button {:class "btn"} "Update"))
+       (if (= status "published")
+         (do [:div
+              (submit-button {:class "button" :value "Unpublish" :name "status"} "Unpublish")
+              (submit-button {:class "button" :value "Update" :name "status"} "Update")])         
+         (do [:div
+              (submit-button {:class "button" :value "Save Draft" :name "status"} "Save Draft")
+              (submit-button {:class "button" :value "Publish" :name "status"} "Publish")])))
       (form-to [:post "/admin/delete-post"]
        (hidden-field "id" _id)
        (submit-button {:class "btn"} "Delete"))])))
