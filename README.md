@@ -24,7 +24,6 @@ Use [SimpLESS](http://wearekiss.com/simpless).
 - Upload image to S3 and insert into Markdown editor
 - Blog settings (title, description)
 - Theme settings (border color, background, custom logo, font)
-- Save post as draft
 - Add post authors (integrates with gravatar)
 - Blog post create/update validation (title must not be empty)
 - Pagination

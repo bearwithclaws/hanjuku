@@ -58,9 +58,8 @@
 
 (defn list-posts [page-number]
   (with-collection "blogpost"
-  (find {})
+  (find {:status "published"})
   (fields [:title :slug :date :body])
-  ;; it is VERY IMPORTANT to use array maps with sort
   (sort (array-map :date -1))
   (limit 10)))
 
