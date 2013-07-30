@@ -108,7 +108,7 @@
 (def app
   (if @prod?
     (handler/site all-routes)
-    (reload/wrap-reload (handler/site all-routes))))
+    (reload/wrap-reload (handler/site #'all-routes))))
 
 ;; init
 (defn start-nrepl-server [port]

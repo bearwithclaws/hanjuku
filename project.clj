@@ -25,7 +25,6 @@
   {:dev {:dependencies [[ring-mock "0.1.5"]]}}
 
   ;; for cljs
-  :hooks [leiningen.cljsbuild]
   :source-paths ["src/clj"]
   :cljsbuild {
     :builds {
